@@ -1,0 +1,33 @@
+{
+  "name": "mind-maps-ext",
+  "version": "1.0.0",
+  "description": "The clear way to share complex information. Mind maps plugin is a collaborative mind-mapping tool that helps you make sense of complex things.",
+  "main": "webpack.config.js",
+  "scripts": {
+    "build": "rm -rf dist && webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gcofficial/mind-maps-ext.git"
+  },
+  "keywords": [
+    "mind",
+    "maps",
+    "maps",
+    "Eugen",
+    "Guriev",
+    "beagl"
+  ],
+  "author": "Eugen Guriev <eg@beagl.in>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gcofficial/mind-maps-ext/issues"
+  },
+  "homepage": "https://github.com/gcofficial/mind-maps-ext#readme",
+  "devDependencies": {
+    "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^5.1.1",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10"
+  }
+}

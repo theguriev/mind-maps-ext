@@ -1,0 +1,40 @@
+:root{
+  /* Colors */
+  --primary: #409EFF;
+  --success: #67C23A;
+  --warning: #E6A23C;
+  --danger: #F56C6C;
+  --info: #909399;
+  --text-primary: #303133;
+  --text-regular: #555d66;
+  --text-secondary: #909399;
+  --text-placeholder: #C0C4CC;
+  --border-base: #DCDFE6;
+  --border-light: #E4E7ED;
+  --border-extra-light: #F2F6FC;
+  --white: #ffffff;
+  --black: #000000;
+  --background-base: #F5F7FA;
+  --background-uploader: #fbfdff;
+  --shadow: rgba(0, 0, 0, 0.07);
+  --overlay: rgba(0, 0, 0, 0.5);
+  --title-header-bg: #ebeef5;
+
+  /* Margin and Padding */
+  --space-1: .5rem;
+  --space-2: 1rem;
+  --space-3: 2rem;
+  --space-4: 4rem;
+
+  /* Typography */
+
+  --line-height-1: 1;
+  --line-height-2: 1.125;
+  --line-height-3: 1.25;
+  --line-height-4: 1.5;
+  --caps-letter-spacing: .2em;
+  --bold-font-weight: bold;
+
+  /* Radius */
+  --radius: 4px;
+}
