@@ -1,6 +1,6 @@
 {
-  "name": "mind-maps-ext",
-  "description": "A Vue.js web extension",
+  "name": "mind-maps",
+  "description": "The clear way to share complex information. Mind maps plugin is a collaborative mind-mapping tool that helps you make sense of complex things.",
   "version": "1.0.0",
   "manifest_version": 2,
   "icons": {
@@ -8,7 +8,7 @@
     "128": "img/icon-128x128.png"
   },
   "browser_action": {
-    "default_title": "Mind maps by Beagl"
+    "default_title": "Mind maps"
   },
   "background": {
     "scripts": [
