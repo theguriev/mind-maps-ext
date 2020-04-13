@@ -12,6 +12,7 @@ Mind maps are useful for anyone to plan, take notes, visualise information, brai
 * Keyboard shortcuts.
 
 
-[Write me](mailto:eg@beagl.in)
-[Hire me](https://www.linkedin.com/in/therealguriev/)
-[Like me](https://www.instagram.com/theguriev/)
+**Social links**
+* [Write me](mailto:eg@beagl.in)
+* [Hire me](https://www.linkedin.com/in/therealguriev/)
+* [Like me](https://www.instagram.com/theguriev/)
