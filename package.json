@@ -1,6 +1,6 @@
 {
   "name": "mind-maps-ext",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "The clear way to share complex information. Mind maps plugin is a collaborative mind-mapping tool that helps you make sense of complex things.",
   "main": "webpack.config.js",
   "scripts": {
