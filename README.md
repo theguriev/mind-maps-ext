@@ -10,3 +10,8 @@ Mind maps are useful for anyone to plan, take notes, visualise information, brai
 * Save everything on local storage. Your mind maps will be with you in any time even without internet connection.
 * Export to PNG, SVG, JPG.
 * Keyboard shortcuts.
+
+
+[Write me](mailto:eg@beagl.in)
+[Hire me](https://www.linkedin.com/in/therealguriev/)
+[Like me](https://www.instagram.com/theguriev/)
