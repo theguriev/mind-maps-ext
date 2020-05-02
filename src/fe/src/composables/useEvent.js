@@ -8,7 +8,6 @@ export default function (el, name, listener, options) {
     element,
     (newVal, _oldVal, onCleanup) => {
       newVal && newVal.addEventListener(name, listener, options)
-
       onCleanup(() => newVal && newVal.removeEventListener(name, listener))
     }
   )

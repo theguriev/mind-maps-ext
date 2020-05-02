@@ -3,8 +3,9 @@
     ref="visibilityArea"
     class="panno"
     @mousedown="startPan"
-    @mousemove="pan"
+    @mousemove="panIfNotDisabled"
     @mouseup="endPan"
+    @mouseleave="endPan"
   >
     <div
       class="panno-content"
@@ -45,6 +46,10 @@ export default {
     height: {
       type: Number,
       default: 0
+    },
+    disablePan: {
+      type: Boolean,
+      default: false
     }
   },
   setup (props, { emit }) {
@@ -78,6 +83,8 @@ export default {
       paning
     } = usePan({ visibilityArea, offsetX, offsetY, node, scale, zoomArea }, emit)
 
+    const panIfNotDisabled = computed(() => props.disablePan ? () => {} : pan)
+
     const style = computed(() => ({
       transformOrigin: '0 0 0',
       transform: `matrix(${scale.value}, 0.00, 0.00, ${scale.value}, ${offsetX.value}, ${offsetY.value})`
@@ -98,7 +105,8 @@ export default {
       style,
       node,
       visibilityArea,
-      zoomArea
+      zoomArea,
+      panIfNotDisabled
     }
   }
 }

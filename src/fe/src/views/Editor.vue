@@ -92,6 +92,7 @@
         :pannedNode="pannedNode"
         :width="width"
         :height="height"
+        :disablePan="resizingTextarea !== null"
         @mouseup="pannedNode = null"
         @updateNodePosition="updatePosition"
       >
@@ -120,12 +121,16 @@
             :key="el.id"
             :is="el.component"
             :metaPressing="metaPressing"
+            :class="`component-${id}`"
             @add="add"
             @remove="remove"
             @mouseup="pannedNode = null"
             @mousedown="pannedNode = el"
             @input="input($event, el)"
-            v-bind="el" />
+            @edit="editNode(id, $event)"
+            @startResize="resizingTextarea = $event"
+            v-bind="el"
+          />
         </template>
         <template v-slot:footer>
           <footer-logo />
@@ -160,6 +165,7 @@ import useEvent from '@/composables/useEvent'
 import useDownload from '@/composables/useDownload'
 import { one, save } from '@/utils/api/map'
 import iif from '@/utils/iif'
+import { clockIndexWithChildren } from '@/utils/clockIndex'
 
 let beforeRouteData = null
 
@@ -177,8 +183,17 @@ export default {
     FooterLogo
   },
   beforeRouteEnter (to, from, next) {
-    beforeRouteData = one(to.params.id)
-    next()
+    one(to.params.id)
+      .then(res => res.data)
+      .then(
+        res => {
+          if (!res.id) {
+            return next('/')
+          }
+          beforeRouteData = res
+          return next()
+        }
+      )
   },
   setup (_, { root }) {
     const panno = ref(null)
@@ -186,6 +201,7 @@ export default {
     const metaPressing = ref(false)
     const pannedNode = ref(null)
     const visibleShortcuts = ref(false)
+    const resizingTextarea = ref(null)
     const { width, height } = useOnResize(panno)
 
     const {
@@ -198,7 +214,7 @@ export default {
       updateBranch,
       remove
     } = useAdjacency(new Map(beforeRouteData.content))
-
+    window.t = beforeRouteData
     const {
       x: colorX,
       y: colorY,
@@ -223,7 +239,7 @@ export default {
     function input ({ event }, el) {
       update({
         ...el,
-        name: event.target.innerText
+        name: event.target.value
       })
     }
 
@@ -250,7 +266,9 @@ export default {
         // Ctr + Alt + S
         [event.ctrlKey === true && event.altKey === true && event.code === 'KeyS', saveSvg],
         // Ctr + S
-        [event.ctrlKey === true && event.code === 'KeyS', saveMap]
+        [event.ctrlKey === true && event.code === 'KeyS', saveMap],
+        // Alt + Enter
+        [event.altKey === true && event.code === 'Enter', () => closeEditings({ target: null })]
       ]
 
       chain(dictionary)
@@ -270,9 +288,111 @@ export default {
       save(beforeRouteData.id, beforeRouteData)
     }
 
+    function editNode (editID, $event) {
+      adjacency.value = chain(adjacency.value)
+        .thru(Array.from)
+        .map(
+          ([id, node]) => ([
+            id,
+            {
+              ...node,
+              editing: id === editID
+            }
+          ])
+        )
+        .thru(entries => new Map(entries))
+        .value()
+    }
+
+    function endResizing () {
+      if (resizingTextarea.value !== null) {
+        resizingTextarea.value = null
+      }
+    }
+
+    function closeEditings (event) {
+      const editing = chain(adjacency.value)
+        .thru(Array.from)
+        .filter(([id, node]) => node.editing === true)
+        .thru(current => current.length > 0 ? current[0][0] : false)
+        .value()
+
+      // Click outside div element
+      if (editing !== false && !document.querySelector(`.component-${editing}`).contains(event.target)) {
+        adjacency.value = chain(adjacency.value)
+          .thru(Array.from)
+          .map(
+            ([id, node]) => ([
+              id,
+              {
+                ...node,
+                editing: false
+              }
+            ])
+          )
+          .thru(entries => new Map(entries))
+          .value()
+      }
+    }
+
+    function getScale () {
+      return chain(panno).get('value.scale', 1).value()
+    }
+
+    function resizeRightSideUp ({ x, y }, { left, bottom }) {
+      return {
+        width: (x - left) / getScale(),
+        height: (bottom - y) / getScale()
+      }
+    }
+
+    function resizeRightSideDown ({ x, y }, { left, top }) {
+      return {
+        width: (x - left) / getScale(),
+        height: (y - top) / getScale()
+      }
+    }
+
+    function resizeLeftSideUp ({ x, y }, { right, bottom }) {
+      return {
+        width: (right - x) / getScale(),
+        height: (bottom - y) / getScale()
+      }
+    }
+
+    function resizeLeftSideDown ({ x, y }, { right, top }) {
+      return {
+        width: (right - x) / getScale(),
+        height: (y - top) / getScale()
+      }
+    }
+
+    function resizerMove (event) {
+      if (resizingTextarea.value !== null) {
+        const node = adjacency.value.get(resizingTextarea.value.id)
+        if (node) {
+          const index = clockIndexWithChildren(node)
+          const clock = new Map([
+            [11, resizeRightSideUp], // 11 Right side up
+            [9, resizeLeftSideUp], // 9 Left side up
+            [-9, resizeRightSideDown], // -9 Rigth side down
+            [-11, resizeLeftSideDown] // -11 Left side down
+          ])
+          update({
+            ...node,
+            ...clock.get(index)(event, resizingTextarea.value.textarea.getBoundingClientRect())
+          })
+        }
+      }
+    }
+
     useEvent(window, 'keydown', keydown)
     useEvent(window, 'keyup', keyup)
     useEvent(window, 'keypress', shortcuts)
+    useEvent(window, 'mouseup', endResizing)
+    useEvent(window, 'mouseleave', endResizing)
+    useEvent(window, 'mousedown', closeEditings)
+    useEvent(window, 'mousemove', resizerMove)
 
     return {
       input,
@@ -298,7 +418,9 @@ export default {
       content,
       saveSvg,
       savePng,
-      saveJpeg
+      saveJpeg,
+      editNode,
+      resizingTextarea
     }
   }
 }

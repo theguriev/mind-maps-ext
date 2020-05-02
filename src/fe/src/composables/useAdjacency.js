@@ -24,6 +24,27 @@ function fillComponent ([id, value]) {
   ]
 }
 
+function fillEditing ([id, value]) {
+  return [
+    id,
+    {
+      ...value,
+      editing: value.editing === true
+    }
+  ]
+}
+
+function fillWidthHeight ([id, value]) {
+  return [
+    id,
+    {
+      ...value,
+      width: value.width || 140,
+      height: value.height || 32
+    }
+  ]
+}
+
 function isUpSide ({ y: fromY }, { y: toY }) {
   return fromY > toY
 }
@@ -132,6 +153,8 @@ function prepareList (adjacency) {
     .thru(Array.from)
     .map(fillId)
     .map(fillComponent)
+    .map(fillEditing)
+    .map(fillWidthHeight)
     .map(fillSide(adjacency.value))
     .map(fillHaveChildren(adjacency.value))
     .thru(mapOf)
@@ -194,7 +217,7 @@ export default function (map) {
     adjacency.value.set(
       guid(),
       {
-        name: 'Click, to edit that',
+        name: '',
         x,
         y,
         parent: parentID,

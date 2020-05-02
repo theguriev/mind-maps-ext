@@ -8,7 +8,7 @@ import { PREFIX } from './maps'
  * @returns {Promise}
  */
 export function one (id) {
-  return JSON.parse(localStorage.getItem(PREFIX + id))
+  return Promise.resolve({ data: JSON.parse(localStorage.getItem(PREFIX + id)) })
 }
 
 /**
@@ -21,5 +21,5 @@ export function one (id) {
  */
 export function save (id, map) {
   localStorage.setItem(PREFIX + id, JSON.stringify(map))
-  return one(id)
+  return Promise.resolve({ data: one(id) })
 }

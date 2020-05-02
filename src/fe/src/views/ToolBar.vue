@@ -45,6 +45,15 @@ button.bgl-toolbar-button{
     background: var(--text-regular);
   }
 
+  &:not([disabled]):active{
+    background-color: var(--text-primary);
+    box-shadow: inset 0 0 0 1px var(--border-light), inset 0 0 0 2px var(--white), 0 1px 1px var(--border-base);
+
+    svg{
+      fill: var(--white);
+    }
+  }
+
   &:focus{
     outline: none;
   }

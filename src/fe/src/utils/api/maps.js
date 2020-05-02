@@ -17,7 +17,7 @@ export function add (data) {
     ...data
   }
   localStorage.setItem(PREFIX + id, JSON.stringify(newData))
-  return newData
+  return Promise.resolve({ data: newData })
 }
 
 /**
@@ -26,10 +26,11 @@ export function add (data) {
  * @returns {Promise}
  */
 export function all () {
-  return chain(Object.keys(localStorage))
+  const res = chain(Object.keys(localStorage))
     .filter(key => key.indexOf(PREFIX) === 0)
     .map(key => JSON.parse(localStorage.getItem(key)))
     .value()
+  return Promise.resolve({ data: res })
 }
 
 /**
@@ -40,7 +41,8 @@ export function all () {
  * @returns {Promise}
  */
 export function delMaps (ids) {
-  return chain(ids)
+  const res = chain(ids)
     .forEach(id => localStorage.removeItem(PREFIX + id))
     .value()
+  return Promise.resolve({ data: res })
 }

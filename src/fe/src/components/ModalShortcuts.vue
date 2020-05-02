@@ -16,6 +16,14 @@
     </div>
     <a-divider />
     <div class="flex justify-between">
+      <div class="left">Close editing</div>
+      <div class="right">
+        <a-tag title="Control">⌥</a-tag>
+        <a-tag>Enter</a-tag>
+      </div>
+    </div>
+    <a-divider />
+    <div class="flex justify-between">
       <div class="left">Keyboard shortcuts</div>
       <div class="right">
         <a-tag title="Control">^</a-tag>
@@ -51,6 +59,7 @@
         <a-tag>Click ( on plus button )</a-tag>
       </div>
     </div>
+    <a-divider />
 
     <h3 class="mt3">Pan</h3>
     <a-divider />

@@ -46,7 +46,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .footer-logo{
-  position: absolute;
+  position: fixed;
   bottom: 50px;
   width: 100px;
   left: 50%;
